@@ -1,8 +1,6 @@
-package fr.ensisa.vallerich.comptidroid;
+package fr.ensisa.vallerich.comptidroid.ui;
 
 import android.os.Bundle;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -10,6 +8,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import fr.ensisa.vallerich.comptidroid.R;
+import fr.ensisa.vallerich.comptidroid.database.AppDatabase;
 import fr.ensisa.vallerich.comptidroid.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        AppDatabase.create(getApplicationContext());
     }
 
 }
