@@ -3,13 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
-
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="fr.ensisa.vallerich.comptidroid.ui.account.AccountListFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/account_list_fragment" />
+    app:startDestination="@id/navigation_accountList">
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -21,5 +15,26 @@
         android:id="@+id/navigation_notifications"
         android:name="fr.ensisa.vallerich.comptidroid.ui.account.AccountListFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_notifications"/>
+
+    <fragment
+        android:id="@+id/navigation_accountList"
+        android:name="fr.ensisa.vallerich.comptidroid.ui.account.AccountListFragment"
+        android:label="account_list_fragment"
+        tools:layout="@layout/account_list_fragment">
+        <action
+            android:id="@+id/action_navigation_accountList_to_account"
+            app:destination="@id/accountFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="fr.ensisa.vallerich.comptidroid.ui.account.AccountFragment"
+        android:label="account_fragment"
+        tools:layout="@layout/account_fragment">
+        <argument
+            android:name="id"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 </navigation>

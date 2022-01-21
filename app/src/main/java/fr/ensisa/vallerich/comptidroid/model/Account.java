@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 
 @Entity
 public class Account {
-    @PrimaryKey
-    private long id;
+    @PrimaryKey (autoGenerate = true)
+    private long aid;
     private String name;
     private BigDecimal amount;
 
-    public Account() { this.id = 0; }
+    public Account() { this.aid = 0; }
 
     @Ignore
     public Account(String name, BigDecimal amount) {
@@ -21,12 +21,12 @@ public class Account {
         this.amount = amount;
     }
 
-    public long getId() {
-        return id;
+    public long getAid() {
+        return aid;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setAid(long aid) {
+        this.aid = aid;
     }
 
     public BigDecimal getAmount() {

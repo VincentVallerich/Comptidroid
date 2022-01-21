@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import fr.ensisa.vallerich.comptidroid.R;
 import fr.ensisa.vallerich.comptidroid.database.AppDatabase;
+import fr.ensisa.vallerich.comptidroid.database.DatabaseFeeder;
 import fr.ensisa.vallerich.comptidroid.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         AppDatabase.create(getApplicationContext());
+        DatabaseFeeder feeder = new DatabaseFeeder();
+//        feeder.feed();
     }
 
 }
