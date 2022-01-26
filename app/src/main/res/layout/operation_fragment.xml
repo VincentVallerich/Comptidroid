@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.OperationFragment">
+
+    <data>
+        <variable name="vm" type="fr.ensisa.vallerich.comptidroid.ui.operation.OperationViewModel" />
+        <variable name="setLabel" type="androidx.databinding.adapters.TextViewBindingAdapter.OnTextChanged" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:paddingHorizontal="8dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/label_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/operation_label_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.label}"
+                        android:textSize="36sp"
+                        android:textStyle="bold"
+                        android:textAlignment="center"
+                        app:layout_constraintStart_toStartOf="@id/operation_label_layout"
+                        app:layout_constraintEnd_toEndOf="@id/operation_label_layout"
+                        app:layout_constraintTop_toTopOf="@id/operation_label_layout"/>
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.label}"
+                        android:textSize="36sp"
+                        android:textStyle="bold"
+                        android:textAlignment="center"
+                        android:visibility="gone"
+                        android:onTextChanged="@{(s, start, before, count) -> setLabel.onTextChanged(s, start, before, count)}"
+                        app:layout_constraintStart_toStartOf="@id/operation_label_layout"
+                        app:layout_constraintEnd_toEndOf="@id/operation_label_layout"
+                        app:layout_constraintTop_toTopOf="@id/operation_label_layout"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:id="@+id/edit_name_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/edit_icon"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/operation_label_layout"
+                    app:layout_constraintTop_toTopOf="@id/operation_label_layout"
+                    app:layout_constraintBottom_toBottomOf="@id/operation_label_layout"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{(vm.amount.doubleValue() > 0 ? `+` : ``) + vm.amount.toString() + `€`}"
+                android:textColor="@{vm.amount.doubleValue() > 0 ? @color/green_color : @color/error_color}"
+                android:textSize="26sp"
+                app:layout_constraintTop_toBottomOf="@id/label_layout"
+                app:layout_constraintStart_toStartOf="@id/label_layout"
+                app:layout_constraintEnd_toEndOf="@id/label_layout"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

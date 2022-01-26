@@ -12,7 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import fr.ensisa.vallerich.comptidroid.R;
 import fr.ensisa.vallerich.comptidroid.database.AppDatabase;
-import fr.ensisa.vallerich.comptidroid.database.DatabaseFeeder;
 import fr.ensisa.vallerich.comptidroid.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,15 +29,17 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                R.id.navigation_budget, R.id.navigation_account)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         AppDatabase.create(getApplicationContext());
-        DatabaseFeeder feeder = new DatabaseFeeder();
-//        feeder.feed();
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        return Navigation.findNavController(this, R.id.nav_host_fragment_activity_main).navigateUp() || super.onSupportNavigateUp();
+    }
 }

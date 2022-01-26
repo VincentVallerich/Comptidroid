@@ -22,12 +22,21 @@ public class Operation {
     }
 
     @Ignore
-    public Operation(Date operationDate, Date valueDate, BigDecimal amount, Type type, String label) {
+    public Operation(long id, Date operationDate, Date valueDate, BigDecimal amount, Type type, String label) {
+        this.oid = id;
         this.operationDate = operationDate;
         this.valueDate = valueDate;
         this.amount = amount;
         this.type = type;
         this.label = label;
+    }
+
+    public Operation clone () {
+        try {
+            return (Operation) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 
     public long getOid() {

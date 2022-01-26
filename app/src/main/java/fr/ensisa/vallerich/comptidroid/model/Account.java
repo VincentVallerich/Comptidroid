@@ -12,13 +12,16 @@ public class Account {
     private long aid;
     private String name;
     private BigDecimal amount;
+    private BigDecimal overdraft;
 
     public Account() { this.aid = 0; }
 
     @Ignore
-    public Account(String name, BigDecimal amount) {
+    public Account(long id, String name, BigDecimal amount, BigDecimal overdraft) {
+        this.aid = id;
         this.name = name;
         this.amount = amount;
+        this.overdraft = overdraft;
     }
 
     public long getAid() {
@@ -43,5 +46,13 @@ public class Account {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BigDecimal getOverdraft() {
+        return overdraft;
+    }
+
+    public void setOverdraft(BigDecimal overdraft) {
+        this.overdraft = overdraft;
     }
 }

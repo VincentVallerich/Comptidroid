@@ -20,6 +20,7 @@ public interface AccountDao {
     @Query("SELECT * from account")
     public LiveData<List<Account>> getAll();
 
+    @Transaction
     @Query("SELECT * FROM account WHERE aid = :id")
     public LiveData<FullAccount> getById(long id);
 

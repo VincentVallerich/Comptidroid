@@ -3,18 +3,21 @@ package fr.ensisa.vallerich.comptidroid.database;
 import androidx.room.TypeConverter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 public class DatabaseTypeConverters {
 
+    private static final BigDecimal converter = new BigDecimal(100);
+
     @TypeConverter
-    public static long bigDecimal2Long(BigDecimal amount) {
-        return amount == null ? 0L : amount.longValue();
+    public BigDecimal fromLong(Long value) {
+        return value == null ? BigDecimal.ZERO : new BigDecimal(value).divide(converter);
     }
 
     @TypeConverter
-    public static BigDecimal long2BigDecimal(long amount) {
-        return new BigDecimal(amount);
+    public Long toLong(BigDecimal bigDecimal) {
+        return bigDecimal == null ? 0L : bigDecimal.multiply(converter).longValue();
     }
 
     @TypeConverter

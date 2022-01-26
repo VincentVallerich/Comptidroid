@@ -20,18 +20,35 @@ import fr.ensisa.vallerich.comptidroid.model.Operation;
 public class AccountViewModel extends ViewModel {
 
     private AccountDao accountDao;
-    private LiveData<FullAccount> account;
-    private MutableLiveData<Long> id = new MutableLiveData<>();
+    private MutableLiveData<FullAccount> fullAccount;
+    private MutableLiveData<Account> account;
+    private final MutableLiveData<Long> id = new MutableLiveData<>();
     private MutableLiveData<String> name;
     private MutableLiveData<BigDecimal> amount;
+    private MutableLiveData<BigDecimal> overdraft;
     private MediatorLiveData<List<Operation>> operations;
+    private MediatorLiveData<Boolean> editMode;
 
     public void setAccountDao(AccountDao accountDao) {
         this.accountDao = accountDao;
-        this.account = Transformations.switchMap(id, a -> accountDao.getById(a));
-        this.name = Transformations.map(account, a -> a.account.getName());
-        this.amount = Transformations.map(account, a -> a.account.getAmount());
-        this.operations = Transformations.map(account, a -> new ArrayList<>(a.operations));
+        this.fullAccount = Transformations.switchMap(id, a -> accountDao.getById(a));
+        this.account = Transformations.map(fullAccount, f -> f.account);
+        this.name = Transformations.map(account, a -> a.getName());
+        this.amount = Transformations.map(account, a -> a.getAmount());
+        this.overdraft = Transformations.map(account, a -> a.getOverdraft());
+        this.operations = Transformations.map(fullAccount, f -> clone(f.operations));
+
+        editMode = new MediatorLiveData<>();
+        editMode.setValue(false);
+    }
+
+    private List<Operation> clone(List<Operation> original) {
+        if (original == null) return null;
+        List<Operation> copy = new ArrayList<>(original.size());
+        for (Operation operation : original) {
+            copy.add(operation.clone());
+        }
+        return copy;
     }
 
     public void createAccount() {
@@ -56,5 +73,40 @@ public class AccountViewModel extends ViewModel {
 
     public MutableLiveData<List<Operation>> getOperations() {
         return operations;
+    }
+
+    public MutableLiveData<BigDecimal> getAmount() {
+        return amount;
+    }
+
+    public MutableLiveData<BigDecimal> getOverdraft() {
+        return overdraft;
+    }
+
+    public LiveData<Boolean> getEditMode() {
+        return editMode;
+    }
+
+    public void switchEditMode() {
+        editMode.postValue(!editMode.getValue());
+    }
+
+    public void save() {
+        Account account = new Account(
+                id.getValue(),
+                name.getValue(),
+                amount.getValue(),
+                overdraft.getValue());
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                accountDao.upsert(account);
+            }
+        });
+    }
+
+    public void setName(String newName) {
+        name.postValue(newName);
     }
 }
