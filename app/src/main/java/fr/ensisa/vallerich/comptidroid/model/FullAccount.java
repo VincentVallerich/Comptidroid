@@ -11,9 +11,8 @@ public class FullAccount {
     @Embedded
     public Account account;
     @Relation(
-            parentColumn = "aid",
-            entityColumn = "oid",
-            associateBy = @Junction(AccountOperationAssociation.class)
+        parentColumn = "aid",
+        entityColumn = "oid"
     )
     public List<Operation> operations;
 }

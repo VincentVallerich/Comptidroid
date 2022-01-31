@@ -17,4 +17,10 @@
     <string name="accounts_header">Your accounts</string>
     <string name="no_operation">No operation</string>
     <string name="no_account">No account</string>
+    <string name="label">Label</string>
+    <string name="title_date_picker">Operation date</string>
+    <string name="operationDate">Operation date</string>
+    <string name="new_operation">New operation</string>
+    <string name="valueDate">Value Date</string>
+    <string name="create">Create</string>
 </resources>

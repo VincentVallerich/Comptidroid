@@ -3,6 +3,7 @@ package fr.ensisa.vallerich.comptidroid.ui.account;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import java.math.BigDecimal;
@@ -12,14 +13,18 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import fr.ensisa.vallerich.comptidroid.database.dao.AccountDao;
+import fr.ensisa.vallerich.comptidroid.database.dao.OperationDao;
 import fr.ensisa.vallerich.comptidroid.livedata.Transformations;
 import fr.ensisa.vallerich.comptidroid.model.Account;
+import fr.ensisa.vallerich.comptidroid.model.AccountOperationAssociation;
 import fr.ensisa.vallerich.comptidroid.model.FullAccount;
 import fr.ensisa.vallerich.comptidroid.model.Operation;
+import fr.ensisa.vallerich.comptidroid.ui.operation.OperationFragment;
 
 public class AccountViewModel extends ViewModel {
 
     private AccountDao accountDao;
+    private OperationDao operationDao;
     private MutableLiveData<FullAccount> fullAccount;
     private MutableLiveData<Account> account;
     private final MutableLiveData<Long> id = new MutableLiveData<>();
@@ -36,17 +41,17 @@ public class AccountViewModel extends ViewModel {
         this.name = Transformations.map(account, a -> a.getName());
         this.amount = Transformations.map(account, a -> a.getAmount());
         this.overdraft = Transformations.map(account, a -> a.getOverdraft());
-        this.operations = Transformations.map(fullAccount, f -> clone(f.operations));
+        this.operations = Transformations.map(fullAccount, f -> f.operations);
 
         editMode = new MediatorLiveData<>();
         editMode.setValue(false);
     }
 
-    private List<Operation> clone(List<Operation> original) {
+    private List<AccountOperationAssociation> clone(List<AccountOperationAssociation> original) {
         if (original == null) return null;
-        List<Operation> copy = new ArrayList<>(original.size());
-        for (Operation operation : original) {
-            copy.add(operation.clone());
+        List<AccountOperationAssociation> copy = new ArrayList<>(original.size());
+        for (AccountOperationAssociation association : original) {
+            copy.add(association.clone());
         }
         return copy;
     }
@@ -108,5 +113,23 @@ public class AccountViewModel extends ViewModel {
 
     public void setName(String newName) {
         name.postValue(newName);
+    }
+
+    public void setOperationDao(OperationDao operationDao) {
+        this.operationDao = operationDao;
+    }
+
+    public void addOperation(long operationId) {
+        LiveData<Operation> op = operationDao.getById(operationId);
+        op.observeForever(
+            new Observer<Operation>() {
+                @Override
+                public void onChanged(Operation operation) {
+                    op.removeObserver(this);
+                    operations.getValue().add(operation);
+                    operations.postValue(operations.getValue());
+                }
+            }
+        );
     }
 }

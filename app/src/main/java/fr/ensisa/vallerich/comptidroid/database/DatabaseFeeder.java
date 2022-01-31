@@ -20,8 +20,8 @@ public class DatabaseFeeder {
         long[] aids = new long[3];
         AccountDao dao = AppDatabase.get().getAccountDao();
         aids[0] = dao.upsert(new Account(0, "Compte courant", new BigDecimal("1234.56").setScale(2, RoundingMode.FLOOR), new BigDecimal(500).setScale(2, RoundingMode.FLOOR)));
-        aids[0] = dao.upsert(new Account(0, "Compte cheque", new BigDecimal("-56.78").setScale(2, RoundingMode.FLOOR), new BigDecimal(100).setScale(2, RoundingMode.FLOOR)));
-        aids[0] = dao.upsert(new Account(0, "Livret A", BigDecimal.ZERO, BigDecimal.ZERO));
+        aids[1] = dao.upsert(new Account(0, "Compte cheque", new BigDecimal("-56.78").setScale(2, RoundingMode.FLOOR), new BigDecimal(100).setScale(2, RoundingMode.FLOOR)));
+        aids[2] = dao.upsert(new Account(0, "Livret A", BigDecimal.ZERO, BigDecimal.ZERO));
 
         return aids;
     }

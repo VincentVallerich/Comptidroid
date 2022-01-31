@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.adapters.TextViewBindingAdapter;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -30,10 +31,14 @@ import fr.ensisa.vallerich.comptidroid.R;
 import fr.ensisa.vallerich.comptidroid.database.AppDatabase;
 import fr.ensisa.vallerich.comptidroid.databinding.AccountFragmentBinding;
 import fr.ensisa.vallerich.comptidroid.databinding.OperationItemBinding;
+import fr.ensisa.vallerich.comptidroid.model.AccountOperationAssociation;
 import fr.ensisa.vallerich.comptidroid.model.Operation;
+import fr.ensisa.vallerich.comptidroid.ui.dialog.OperationCreatorFragmentDirections;
+import fr.ensisa.vallerich.comptidroid.ui.operation.OperationFragment;
 
 public class AccountFragment extends Fragment {
 
+    private static final String OPERATION = "operation";
     private AccountViewModel mViewModel;
     private AccountFragmentBinding binding;
     private OperationAdapter adapter;
@@ -44,6 +49,16 @@ public class AccountFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        getParentFragmentManager().setFragmentResultListener(OPERATION, this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                if (requestKey.equals(OPERATION)) {
+                    long operationId = result.getLong(OperationFragment.ID);
+                    mViewModel.addOperation(operationId);
+                }
+            }
+        });
     }
 
     @Override
@@ -62,7 +77,7 @@ public class AccountFragment extends Fragment {
         binding.setAddOperation(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(AccountFragment.this).navigate(R.id.action_navigation_account_to_operation);
+                NavHostFragment.findNavController(AccountFragment.this).navigate(R.id.action_account_to_operation_creator);
             }
         });
 
@@ -87,13 +102,12 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
-        AppDatabase.isReady().observe(getViewLifecycleOwner(), base -> {
-            if (base == null) return;
-            mViewModel.setAccountDao(AppDatabase.get().getAccountDao());
-            mViewModel.getOperations().observe(getViewLifecycleOwner(), operations -> adapter.setOperations(operations));
-            mViewModel.getEditMode().observe(getViewLifecycleOwner(), v -> editNameMode(v.booleanValue()));
-            mViewModel.getName().observe(getViewLifecycleOwner(), n -> binding.name.setText(n));
-        });
+        mViewModel.setAccountDao(AppDatabase.get().getAccountDao());
+        mViewModel.setOperationDao(AppDatabase.get().getOperationDao());
+        mViewModel.getOperations().observe(getViewLifecycleOwner(), operations -> adapter.setOperations(operations));
+        mViewModel.getEditMode().observe(getViewLifecycleOwner(), v -> editNameMode(v.booleanValue()));
+        mViewModel.getName().observe(getViewLifecycleOwner(), n -> binding.name.setText(n));
+
         long id = AccountFragmentArgs.fromBundle(getArguments()).getId();
         if (id == 0) {
             mViewModel.createAccount();
@@ -165,5 +179,11 @@ public class AccountFragment extends Fragment {
             }
             notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

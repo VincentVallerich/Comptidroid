@@ -13,13 +13,16 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.adapters.TextViewBindingAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import fr.ensisa.vallerich.comptidroid.R;
 import fr.ensisa.vallerich.comptidroid.database.AppDatabase;
 import fr.ensisa.vallerich.comptidroid.databinding.OperationFragmentBinding;
+import fr.ensisa.vallerich.comptidroid.ui.account.AccountFragment;
 import fr.ensisa.vallerich.comptidroid.ui.account.AccountFragmentArgs;
 
 public class OperationFragment extends Fragment {
+    public static final String ID = "id";
     private OperationViewModel mViewModel;
     private OperationFragmentBinding binding;
     private Drawable editIcon;
@@ -44,6 +47,7 @@ public class OperationFragment extends Fragment {
             }
         });
 
+
         binding.editNameIcon.setOnClickListener((view -> {
             if (mViewModel.getEditMode().getValue()) {
                 mViewModel.save();
@@ -59,8 +63,8 @@ public class OperationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(OperationViewModel.class);
         mViewModel.setOperationDao(AppDatabase.get().getOperationDao());
+        mViewModel.setAccountDao(AppDatabase.get().getAccountDao());
         mViewModel.getLabel().observe(getViewLifecycleOwner(), o -> binding.label.setText(o));
-//        mViewModel.getOperationDate().observe(getViewLifecycleOwner(), operations -> adapter.setOperations(operations));
         mViewModel.getEditMode().observe(getViewLifecycleOwner(), v -> editNameMode(v.booleanValue()));
         long id = AccountFragmentArgs.fromBundle(getArguments()).getId();
         if (id == 0) {
@@ -83,5 +87,11 @@ public class OperationFragment extends Fragment {
         binding.label.setVisibility(edit ? View.GONE : View.VISIBLE);
         binding.editLabel.setVisibility(edit ? View.VISIBLE : View.GONE);
         binding.editNameIcon.setImageDrawable(edit ? validIcon : editIcon);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

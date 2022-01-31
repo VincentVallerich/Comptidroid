@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="vm" type="fr.ensisa.vallerich.comptidroid.ui.operation.OperationViewModel" />
+        <variable name="changeDate" type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        tools:context=".ui.dialog.OperationCreatorFragment">
+
+        <TextView
+            android:id="@+id/id"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@{vm.id}"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/label_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/label"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/label_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/text_operation_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/operationDate"
+            android:layout_marginTop="5dp"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/label_layout"
+            app:layout_constraintStart_toStartOf="@id/label_layout"
+            app:layout_constraintEnd_toEndOf="@id/label_layout"/>
+
+        <TextView
+            android:id="@+id/operationDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{vm.operationDate}"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/text_operation_date"
+            app:layout_constraintStart_toStartOf="@id/text_operation_date"
+            app:layout_constraintEnd_toEndOf="@id/text_operation_date"/>
+
+        <TextView
+            android:id="@+id/text_value_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/valueDate"
+            android:layout_marginTop="5dp"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/operationDate"
+            app:layout_constraintStart_toStartOf="@id/operationDate"
+            app:layout_constraintEnd_toEndOf="@id/operationDate"/>
+
+        <TextView
+            android:id="@+id/valueDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{vm.valueDate}"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/text_value_date"
+            app:layout_constraintStart_toStartOf="@id/text_value_date"
+            app:layout_constraintEnd_toEndOf="@id/text_value_date"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

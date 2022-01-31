@@ -32,4 +32,9 @@ public class DataBindingAdapters {
     public static void setAmount(TextView view, BigDecimal amount) {
         view.setText(amount == null ? "0.0" : amount.toString());
     }
+
+    @BindingAdapter("android:text")
+    public static void setLong(TextView view, Long l){
+        view.setText(l == null ? "0" : l.toString());
+    }
 }

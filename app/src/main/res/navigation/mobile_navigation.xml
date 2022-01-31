@@ -28,6 +28,10 @@
         <action
             android:id="@+id/action_navigation_account_to_operation"
             app:destination="@id/operationFragment" />
+
+        <action
+            android:id="@+id/action_account_to_operation_creator"
+            app:destination="@id/operationCreatorFragment"/>
     </fragment>
 
     <fragment
@@ -40,5 +44,34 @@
             app:argType="long"
             android:defaultValue="0L"/>
     </fragment>
+
+    <dialog
+        android:id="@+id/operationCreatorFragment"
+        android:name="fr.ensisa.vallerich.comptidroid.ui.dialog.OperationCreatorFragment"
+        android:label="operation_creator_fragment"
+        tools:layout="@layout/operation_creator_fragment">
+
+        <action
+            android:id="@+id/action_operation_to_datePicker"
+            app:destination="@id/navigation_datePicker"/>
+    </dialog>
+
+    <dialog
+        android:id="@+id/navigation_datePicker"
+        android:name="fr.ensisa.vallerich.comptidroid.ui.picker.DatePickerFragment"
+        android:label="@string/title_date_picker" >
+        <argument
+            android:name="date"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="requestKey"
+            app:argType="string"
+            android:defaultValue='""' />
+        <argument
+            android:name="title"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </dialog>
 
 </navigation>

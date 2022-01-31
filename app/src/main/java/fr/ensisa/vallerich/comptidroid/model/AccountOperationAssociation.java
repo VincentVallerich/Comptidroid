@@ -9,16 +9,40 @@ import androidx.room.Index;
     primaryKeys = { "aid", "oid" },
     indices = { @Index("aid"), @Index("oid") }
 )
-public class AccountOperationAssociation {
+public class AccountOperationAssociation implements Cloneable{
 
-    public long aid;
-    public long oid;
+    private long aid;
+    private long oid;
 
-    public AccountOperationAssociation() {}
+    public AccountOperationAssociation() { this.oid=0;}
 
     @Ignore
     public AccountOperationAssociation(long aid, long oid) {
         this.aid = aid;
+        this.oid = oid;
+    }
+
+    public AccountOperationAssociation clone () {
+        try {
+            return (AccountOperationAssociation) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
+
+    public long getAid() {
+        return aid;
+    }
+
+    public void setAid(long aid) {
+        this.aid = aid;
+    }
+
+    public long getOid() {
+        return oid;
+    }
+
+    public void setOid(long oid) {
         this.oid = oid;
     }
 }

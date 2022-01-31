@@ -31,14 +31,6 @@ public class Operation {
         this.label = label;
     }
 
-    public Operation clone () {
-        try {
-            return (Operation) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
-    }
-
     public long getOid() {
         return oid;
     }
