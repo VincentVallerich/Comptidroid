@@ -22,5 +22,10 @@
     <string name="operationDate">Operation date</string>
     <string name="new_operation">New operation</string>
     <string name="valueDate">Value Date</string>
+    <string name="amount">Amount</string>
+    <string name="cancel">Cancel</string>
     <string name="create">Create</string>
+    <string name="select_date">Select a date</string>
+    <string name="debit">Debit</string>
+    <string name="credit">Credit</string>
 </resources>

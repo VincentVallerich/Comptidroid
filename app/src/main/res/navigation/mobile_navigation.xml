@@ -20,6 +20,7 @@
         android:name="fr.ensisa.vallerich.comptidroid.ui.account.AccountFragment"
         android:label="@string/account"
         tools:layout="@layout/account_fragment">
+
         <argument
             android:name="id"
             app:argType="long"
@@ -38,18 +39,41 @@
         android:id="@+id/operationFragment"
         android:name="fr.ensisa.vallerich.comptidroid.ui.operation.OperationFragment"
         android:label="@string/operation"
-        tools:layout="@layout/operation_fragment">
+        tools:layout="@layout/operation_list_fragment">
         <argument
             android:name="id"
             app:argType="long"
             android:defaultValue="0L"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_budget"
+        android:name="fr.ensisa.vallerich.comptidroid.ui.budget.BudgetFragment"
+        android:label="@string/title_budget"
+        tools:layout="@layout/budget_fragment">
+
+    </fragment>
+
     <dialog
         android:id="@+id/operationCreatorFragment"
-        android:name="fr.ensisa.vallerich.comptidroid.ui.dialog.OperationCreatorFragment"
+        android:name="fr.ensisa.vallerich.comptidroid.ui.operation.OperationCreatorFragment"
         android:label="operation_creator_fragment"
         tools:layout="@layout/operation_creator_fragment">
+
+        <argument
+            android:name="id"
+            app:argType="long"
+            android:defaultValue="0L" />
+
+        <argument
+            android:name="requestKey"
+            app:argType="string"
+            android:defaultValue='""'/>
+
+        <argument
+            android:name="maxAmount"
+            app:argType="long"
+            android:defaultValue="0L"/>
 
         <action
             android:id="@+id/action_operation_to_datePicker"

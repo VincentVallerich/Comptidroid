@@ -7,7 +7,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -19,7 +18,6 @@ import fr.ensisa.vallerich.comptidroid.model.Account;
 import fr.ensisa.vallerich.comptidroid.model.AccountOperationAssociation;
 import fr.ensisa.vallerich.comptidroid.model.FullAccount;
 import fr.ensisa.vallerich.comptidroid.model.Operation;
-import fr.ensisa.vallerich.comptidroid.ui.operation.OperationFragment;
 
 public class AccountViewModel extends ViewModel {
 
@@ -33,6 +31,7 @@ public class AccountViewModel extends ViewModel {
     private MutableLiveData<BigDecimal> overdraft;
     private MediatorLiveData<List<Operation>> operations;
     private MediatorLiveData<Boolean> editMode;
+    private MediatorLiveData<Operation> operation = new MediatorLiveData<>();
 
     public void setAccountDao(AccountDao accountDao) {
         this.accountDao = accountDao;
@@ -45,15 +44,6 @@ public class AccountViewModel extends ViewModel {
 
         editMode = new MediatorLiveData<>();
         editMode.setValue(false);
-    }
-
-    private List<AccountOperationAssociation> clone(List<AccountOperationAssociation> original) {
-        if (original == null) return null;
-        List<AccountOperationAssociation> copy = new ArrayList<>(original.size());
-        for (AccountOperationAssociation association : original) {
-            copy.add(association.clone());
-        }
-        return copy;
     }
 
     public void createAccount() {
@@ -72,12 +62,12 @@ public class AccountViewModel extends ViewModel {
         this.id.postValue(id);
     }
 
-    public MutableLiveData<String> getName() {
-        return name;
+    public long getId() {
+        return id.getValue();
     }
 
-    public MutableLiveData<List<Operation>> getOperations() {
-        return operations;
+    public MutableLiveData<String> getName() {
+        return name;
     }
 
     public MutableLiveData<BigDecimal> getAmount() {
@@ -94,6 +84,10 @@ public class AccountViewModel extends ViewModel {
 
     public void switchEditMode() {
         editMode.postValue(!editMode.getValue());
+    }
+
+    public MutableLiveData<List<Operation>> getOperations() {
+        return operations;
     }
 
     public void save() {
@@ -131,5 +125,17 @@ public class AccountViewModel extends ViewModel {
                 }
             }
         );
+    }
+
+    public void setAmount(BigDecimal amount) {
+        if (this.amount.getValue() == null || (amount.floatValue() == this.amount.getValue().floatValue())) return;
+        System.out.println(amount.floatValue());
+        System.out.println(this.amount.getValue().floatValue());
+        this.amount.postValue(amount);
+    }
+
+    public long getMaxAmount() {
+        System.out.println(amount.getValue().subtract(overdraft.getValue().negate()).longValue());
+        return amount.getValue().subtract(overdraft.getValue().negate()).longValue();
     }
 }

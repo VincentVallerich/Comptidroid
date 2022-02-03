@@ -26,7 +26,7 @@ public class Operation {
         this.oid = id;
         this.operationDate = operationDate;
         this.valueDate = valueDate;
-        this.amount = amount;
+        this.amount = type == Type.DEBIT ? amount.negate() : amount;
         this.type = type;
         this.label = label;
     }

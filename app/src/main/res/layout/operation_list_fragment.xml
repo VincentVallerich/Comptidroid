@@ -7,7 +7,6 @@
     <data>
         <variable name="vm" type="fr.ensisa.vallerich.comptidroid.ui.operation.OperationViewModel" />
         <variable name="setLabel" type="androidx.databinding.adapters.TextViewBindingAdapter.OnTextChanged" />
-        <import type="fr.ensisa.vallerich.comptidroid.model.Type"/>
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -79,8 +78,8 @@
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{(vm.type == Type.CREDIT ? `+` : ``) + vm.amount.toString() + `€`}"
-                android:textColor="@{vm.type == Type.CREDIT ? @color/green_color : @color/error_color}"
+                android:text="@{(vm.amount.doubleValue() > 0 ? `+` : ``) + vm.amount.toString() + `€`}"
+                android:textColor="@{vm.amount.doubleValue() > 0 ? @color/green_color : @color/error_color}"
                 android:textSize="26sp"
                 app:layout_constraintTop_toBottomOf="@id/label_layout"
                 app:layout_constraintStart_toStartOf="@id/label_layout"

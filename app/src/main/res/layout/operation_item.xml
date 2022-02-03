@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="operation" type="fr.ensisa.vallerich.comptidroid.model.Operation" />
+        <import type="fr.ensisa.vallerich.comptidroid.model.Type"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,8 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:text="@{(operation.amount.doubleValue() > 0 ? `+` : ``) + operation.amount.toString() + `€`}"
-            android:textColor="@{operation.amount.doubleValue() > 0 ? @color/green_color : @color/error_color}"
+            android:text="@{(operation.type == Type.CREDIT ? `+` : `-`) + operation.amount.toString() + `€`}"
+            android:textColor="@{operation.type == Type.CREDIT ? @color/green_color : @color/error_color}"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/libele"

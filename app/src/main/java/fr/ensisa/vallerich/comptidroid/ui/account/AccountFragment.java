@@ -1,11 +1,9 @@
 package fr.ensisa.vallerich.comptidroid.ui.account;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,24 +14,22 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.adapters.TextViewBindingAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import fr.ensisa.vallerich.comptidroid.R;
 import fr.ensisa.vallerich.comptidroid.database.AppDatabase;
 import fr.ensisa.vallerich.comptidroid.databinding.AccountFragmentBinding;
 import fr.ensisa.vallerich.comptidroid.databinding.OperationItemBinding;
-import fr.ensisa.vallerich.comptidroid.model.AccountOperationAssociation;
 import fr.ensisa.vallerich.comptidroid.model.Operation;
-import fr.ensisa.vallerich.comptidroid.ui.dialog.OperationCreatorFragmentDirections;
+import fr.ensisa.vallerich.comptidroid.model.Type;
 import fr.ensisa.vallerich.comptidroid.ui.operation.OperationFragment;
 
 public class AccountFragment extends Fragment {
@@ -77,7 +73,11 @@ public class AccountFragment extends Fragment {
         binding.setAddOperation(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(AccountFragment.this).navigate(R.id.action_account_to_operation_creator);
+                AccountFragmentDirections.ActionAccountToOperationCreator action = AccountFragmentDirections.actionAccountToOperationCreator();
+                action.setId(mViewModel.getId());
+                action.setMaxAmount(mViewModel.getMaxAmount());
+                action.setRequestKey(OPERATION);
+                NavHostFragment.findNavController(AccountFragment.this).navigate(action);
             }
         });
 
@@ -104,7 +104,7 @@ public class AccountFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         mViewModel.setAccountDao(AppDatabase.get().getAccountDao());
         mViewModel.setOperationDao(AppDatabase.get().getOperationDao());
-        mViewModel.getOperations().observe(getViewLifecycleOwner(), operations -> adapter.setOperations(operations));
+        mViewModel.getOperations().observe(getViewLifecycleOwner(), operations -> setOperations(operations));
         mViewModel.getEditMode().observe(getViewLifecycleOwner(), v -> editNameMode(v.booleanValue()));
         mViewModel.getName().observe(getViewLifecycleOwner(), n -> binding.name.setText(n));
 
@@ -115,6 +115,17 @@ public class AccountFragment extends Fragment {
             mViewModel.setId(id);
         }
         binding.setVm(mViewModel);
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void setOperations(List<Operation> operations) {
+        adapter.setOperations(operations);
+        float amount = 0F;
+        for (Operation op : operations) {
+            if (op == null) continue;
+            amount += (op.getType() == Type.DEBIT) ? -op.getAmount().floatValue() : op.getAmount().floatValue();
+        }
+        mViewModel.setAmount(new BigDecimal(String.format("%.2f", amount)));
     }
 
     private void editNameMode(boolean edit) {
@@ -164,6 +175,7 @@ public class AccountFragment extends Fragment {
         public void onBindViewHolder(@NonNull OperationAdapter.ViewHolder viewHolder, int position) {
             Operation operation = operations.get(position);
             viewHolder.binding.setOperation(operation);
+            viewHolder.binding.executePendingBindings();
         }
 
         @Override
@@ -180,6 +192,8 @@ public class AccountFragment extends Fragment {
             notifyDataSetChanged();
         }
     }
+
+
 
     @Override
     public void onDestroyView() {

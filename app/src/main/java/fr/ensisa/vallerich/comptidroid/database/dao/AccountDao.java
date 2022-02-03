@@ -17,11 +17,11 @@ import fr.ensisa.vallerich.comptidroid.model.FullAccount;
 @Dao
 public interface AccountDao {
 
-    @Query("SELECT * from account")
+    @Query("SELECT * from Account")
     public LiveData<List<Account>> getAll();
 
     @Transaction
-    @Query("SELECT * FROM account WHERE aid = :id")
+    @Query("SELECT * FROM Account WHERE aid = :id")
     public LiveData<FullAccount> getById(long id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

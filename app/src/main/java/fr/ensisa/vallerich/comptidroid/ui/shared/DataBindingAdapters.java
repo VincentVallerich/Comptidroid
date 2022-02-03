@@ -1,10 +1,18 @@
 package fr.ensisa.vallerich.comptidroid.ui.shared;
 
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
+import androidx.databinding.InverseBindingAdapter;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,7 +26,7 @@ public class DataBindingAdapters {
     public static void setDate(TextView view, Date date) {
         String text;
         if (date == null) {
-            text = view.getResources().getString(R.string.nodate);
+            text = view.getResources().getString(R.string.select_date);
         } else {
             if (output == null) {
                 output = new SimpleDateFormat("dd MMMM yyyy");
@@ -33,8 +41,23 @@ public class DataBindingAdapters {
         view.setText(amount == null ? "0.0" : amount.toString());
     }
 
-    @BindingAdapter("android:text")
-    public static void setLong(TextView view, Long l){
-        view.setText(l == null ? "0" : l.toString());
+    @InverseBindingAdapter(attribute = "android:text")
+    public static BigDecimal setText(TextInputEditText view) {
+        if (view.getText() == null) return BigDecimal.ZERO;
+        if (view.getText().toString().isEmpty()) return BigDecimal.ZERO;
+        BigDecimal inView = new BigDecimal(view.getText().toString());
+        return inView;
+    }
+
+    @InverseBindingAdapter(attribute = "android:text")
+    public static int getText(EditText view) {
+        if (view.getText() == null) return 0;
+        if (view.getText().toString().isEmpty()) return 0;
+        try {
+            int inView = Integer.parseInt(view.getText().toString());
+            return inView;
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }

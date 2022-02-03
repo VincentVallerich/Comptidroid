@@ -57,20 +57,20 @@ public class AccountListFragment extends Fragment {
         binding.accountsHeader.setTypeface(ResourcesCompat.getFont(binding.getRoot().getContext(), R.font.cabin_variable_font_wdth));
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(
-                new ItemSwipeCallback(getContext(), ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, (direction, position) -> {
-                    Account account = adapter.accounts.get(position);
-                    switch (direction) {
-                        case ItemTouchHelper.LEFT:
-                            mViewModel.deleteAccount(account);
-                            break;
-                        case ItemTouchHelper.RIGHT:
-                            AccountListFragmentDirections.ActionNavigationAccountListToAccount action =
-                                    AccountListFragmentDirections.actionNavigationAccountListToAccount();
-                            action.setId(account.getAid());
-                            NavHostFragment.findNavController(AccountListFragment.this).navigate(action);
-                            break;
-                    }
-                })
+            new ItemSwipeCallback(getContext(), ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, (direction, position) -> {
+                Account account = adapter.accounts.get(position);
+                switch (direction) {
+                    case ItemTouchHelper.LEFT:
+                        mViewModel.deleteAccount(account);
+                        break;
+                    case ItemTouchHelper.RIGHT:
+                        AccountListFragmentDirections.ActionNavigationAccountListToAccount action =
+                                AccountListFragmentDirections.actionNavigationAccountListToAccount();
+                        action.setId(account.getAid());
+                        NavHostFragment.findNavController(AccountListFragment.this).navigate(action);
+                        break;
+                }
+            })
         );
 
         touchHelper.attachToRecyclerView(binding.accounts);

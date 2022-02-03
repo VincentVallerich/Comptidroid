@@ -13,12 +13,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.adapters.TextViewBindingAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import fr.ensisa.vallerich.comptidroid.R;
 import fr.ensisa.vallerich.comptidroid.database.AppDatabase;
 import fr.ensisa.vallerich.comptidroid.databinding.OperationFragmentBinding;
-import fr.ensisa.vallerich.comptidroid.ui.account.AccountFragment;
 import fr.ensisa.vallerich.comptidroid.ui.account.AccountFragmentArgs;
 
 public class OperationFragment extends Fragment {
@@ -63,15 +61,17 @@ public class OperationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(OperationViewModel.class);
         mViewModel.setOperationDao(AppDatabase.get().getOperationDao());
-        mViewModel.setAccountDao(AppDatabase.get().getAccountDao());
         mViewModel.getLabel().observe(getViewLifecycleOwner(), o -> binding.label.setText(o));
         mViewModel.getEditMode().observe(getViewLifecycleOwner(), v -> editNameMode(v.booleanValue()));
+        mViewModel.getAmount().observe(getViewLifecycleOwner(), a -> binding.amount.setText(a.toString()));
+
         long id = AccountFragmentArgs.fromBundle(getArguments()).getId();
         if (id == 0) {
             mViewModel.createOperation();
         } else {
             mViewModel.setId(id);
         }
+
         binding.setVm(mViewModel);
     }
 

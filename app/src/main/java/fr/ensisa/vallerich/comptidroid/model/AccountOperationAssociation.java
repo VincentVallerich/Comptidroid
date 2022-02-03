@@ -13,21 +13,15 @@ public class AccountOperationAssociation implements Cloneable{
 
     private long aid;
     private long oid;
-
-    public AccountOperationAssociation() { this.oid=0;}
+    public AccountOperationAssociation() {
+        this.aid = 0;
+        this.oid = 0;
+    }
 
     @Ignore
     public AccountOperationAssociation(long aid, long oid) {
         this.aid = aid;
         this.oid = oid;
-    }
-
-    public AccountOperationAssociation clone () {
-        try {
-            return (AccountOperationAssociation) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
     }
 
     public long getAid() {
